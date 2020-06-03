@@ -3,10 +3,10 @@
 
 #include <stdlib.h>
 
-int main_test();
-void _start()
+int main_test(int, char**);
+void _start(int argc, char **argv)
 {
-  main_test();
+  main_test(argc, argv);
   exit(0);
 }
 
