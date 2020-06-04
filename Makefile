@@ -17,18 +17,39 @@ $(bin) : % : %.o
 .PHONY: clean
 
 clean:
-	rm -f $(bin) *.o *~ $(bin:m%=mt%) mt???.c m???.h $(bin:m%.c=m%.h)
+	rm -f $(bin) *.o *~ $(bin:m%=mt%) $(bin:m%=mt%.c) $(bin:m%=t%.c) $(bin:m%=p%.c)
 
-## Probe
+##
+## Test user's functions by calling them from the original main function.
+##
 
-$(bin:m%=mt%) : mt% : mt%.o m%.o 
-	$(CC) $(LD_FLAGS) $(LDFLAGS) -nostartfiles $^ -o $@
+# For each user program m* we build the binary test program mt*
 
-$(bin:m%=mt%.o) : mt%.o : mt%.c m%.h 
-	$(CC) $(CPP_FLAGS) $(C_FLAGS) $(CPPFLAGS) $(CFLAGS) -include test.h -include m*.h -c $< -o $@
+bintest : $(bin:m%=mt%)
 
-mt%.c : m%.c
-	sed -r 's/^ *([a-z]+) ([a-z]+) *\(/\1 \2_test \(/g' $< > $@
+# To build the binary test program mt* we link
+# mt*.o having the user functions modified by the programmer agins
+# t*.o  having the unaltered main function copied from the template
 
-$(bin:m%=m%.h) : m%.h : m%.c
-	egrep  '^ *[a-z]+ [a-z]+ *\(.*\)' $< | sed -r 's/(.*\))/\1;/g' > $@
+$(bin:m%=mt%) : mt% : mt%.o t%.o
+	$(CC) $(LD_FLAGS) $(LDFLAGS) $^ -o $@
+
+# How to fetch original pristine templates
+
+RAWURL=https://raw.githubusercontent.com/exercise-template/cprog02/master
+
+p%.c :
+	wget -O - $(RAWURL)/$(@:p%.c=m%.c) > $@
+
+# Make a modified copy of pristine template file having weak main
+
+mt%.c : p%.c
+	perl -pe 's/^ *([A-Za-z_][A-Za-z0-9_]*)\h+(main*\h*\(.*\))/__attribute__\(\(weak\)\) \1 \2 /g' $< > $@
+
+# Make a modified copy of user-file file heaing weak user functions 
+
+t%.c : m%.c
+	perl -pe 's/^ *([A-Za-z_][A-Za-z0-9_]*)\h+(?!main)([A-Za-z_][A-Za-z0-9_]*\h*\(.*\))/__attribute__\(\(weak\)\) \1 \2 /g' $< > $@
+
+
+
