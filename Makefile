@@ -7,13 +7,19 @@
 
 # User targets:
 # 
-# make		builds all user programs
-# make  m000	builds user program m000 from source m000.c
-# make mt000	builds program mt000 to test m000.c
-# make bintest  builds all test programs
-# make clean	usual housekeeping
+# make		   build all user programs (make all)
+# make  m000	   build user program m000 from source m000.c
 #
-
+# make bin-test    build all test programs
+# make mt000	   build program mt000 to test m000.c
+#
+# make clean-bin   delete what's been built by make (make all)
+# make clean-test  delete what's been built by make bin-test 
+# make clean	   delete everything that's been built but templates
+# make clean-ref   delete template (reference) files
+# make clean-all   delete everything that's been built
+#
+# make fetch-ref   delete and refetch all templates
 
 CC=gcc
 CPP_FLAGS= -Wall -Werror -Wno-unused -Wno-format-zero-length -g
@@ -36,8 +42,10 @@ $(bin) : % : %.o
 
 .PHONY: clean
 
-clean:
-	rm -f $(bin) *.o *~ $(bin:m%=mt%) $(bin:m%=mt%.c) $(bin:m%=t%.c) $(bin:m%=p%.c)
+clean-bin:
+	rm -f $(bin) $(bin:%=%.o) 
+
+clean: clean-bin clean-test
 
 ##
 ## Test user programs
@@ -63,7 +71,7 @@ clean:
 
 # For each user program m* we build the binary test program mt*
 
-bintest : $(bin:m%=mt%)
+bin-test : $(bin:m%=mt%)
 
 # To build the binary test program mt000 we link
 # t000.o   having the user functions modified by the programmer against
@@ -96,12 +104,27 @@ RAWURL=https://raw.githubusercontent.com/exercise-template/cprog02/master
 $(bin:m%=p%.c):
 	wget -O - $(RAWURL)/$(@:p%.c=m%.c) > $@
 
-# Fetch all templates again
+# Clean tests and auxiliary files
 
-fetchtemplates :
-	rm -r $(bin:m%=p%.c)
-	make alltemplates
+clean-test: 
+	rm -f $(bin:m%=mt%)
+	rm -f $(bin:m%=mt%.c) $(bin:m%=t%.c)
+	rm -f $(bin:m%=mt%.o) $(bin:m%=t%.o) $(bin:m%=p%.o)
 
-alltemplates : $(bin:m%=p%.c)
+clean-all: 
+	make clean
+	make clean-test
+	make clean-ref
+
+clean-ref:
+	rm -f $(bin:m%=p%.c)
+
+# Fetch all template (reference) files again
+
+
+fetch-ref : clean-ref
+	make allrefs
+
+allrefs : $(bin:m%=p%.c)
 
 
