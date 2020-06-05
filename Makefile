@@ -86,15 +86,26 @@ $(bin:m%=mt%) : mt% : mt%.o t%.o
 # is built using the standard %.o rule.
 
 t%.c : m%.c
-	perl -pe 's/^ *([A-Za-z_][A-Za-z0-9_]*)\h+(?!main)([A-Za-z_][A-Za-z0-9_]*\h*\(.*\))/__attribute__\(\(weak\)\) \1 \2 /g' $< > $@
+#	perl -pe 's/^ *([A-Za-z_][A-Za-z0-9_]*)\h+(main*\h*\(.*\))/__attribute__\(\(weak\)\) \1 \2 /g' $< > $@
+	perl -pe 's/([A-Za-z_][A-Za-z0-9_]*(?<!define))[\h\n]+(main*\h*\(.*\))/__attribute__\(\(weak\)\) \1 \2 /g' $< > $@
 
-# Source mt000.c is a copy of the pristine, unmodified template p000.c from
+# Source mt000.c is a modified copy of the pristine template p000.c from
 # which user program mt000.c was created. File mt000.c has all its functions
-# but main() marked with the attribute 'weak' so that they do not conflict
-# with those in the user program mt000.c.
+# but main() renamed so that they do not conflict with those in the user
+# program mt000.c.
 
 $(bin:m%=mt%.c) : mt%.c : p%.c
-	perl -pe 's/^ *([A-Za-z_][A-Za-z0-9_]*)\h+(main*\h*\(.*\))/__attribute__\(\(weak\)\) \1 \2 /g' $< > $@
+#	perl -pe 's/^ *([A-Za-z_][A-Za-z0-9_]*)\h+(?!main)([A-Za-z_][A-Za-z0-9_]*)(\h*\(.*\))/\1 \2_off \3/g' $< > $@
+	perl -pe 's/([A-Za-z_][A-Za-z0-9_]*(?<!define))[\h\n]+(?!main)([A-Za-z_][A-Za-z0-9_]*)(\h*\(.*\))/\1 \2_off \3/g' $< > $@
+
+# To build mt%.o we need the headers of the functions in m%.c
+
+$(bin:m%=t%.h): t%.h : m%.c
+	perl -0777pe 's/\/\*(?:(?!\*\/).)*\*\/\n?//sg' $< | perl -ne 'printf if /[A-Za-z_][A-Za-z0-9_]*(?<!define)[\h\n]+((?!main)[A-Za-z_][A-Za-z0-9_]*\h*\(.*\))/' | perl -pe 's/(.*\(.*\))/\1;/g' > $@
+
+
+$(bin:m%=mt%.o) : mt%.o : mt%.c t%.h
+	$(CC) -include t$*.h -c $(CPP_FLAGS) $(C_FLAGS) $(CPPFLAGS) $(CFLAGS) $< -o $@
 
 # In order to be sure that p000.c is in its pristine form and its main
 # function is unmodified, we fetch the original templates from the repository.
@@ -108,7 +119,7 @@ $(bin:m%=p%.c):
 
 clean-test: 
 	rm -f $(bin:m%=mt%)
-	rm -f $(bin:m%=mt%.c) $(bin:m%=t%.c)
+	rm -f $(bin:m%=mt%.c) $(bin:m%=t%.c) $(bin:m%=t%.h)
 	rm -f $(bin:m%=mt%.o) $(bin:m%=t%.o) $(bin:m%=p%.o)
 
 clean-all: 
