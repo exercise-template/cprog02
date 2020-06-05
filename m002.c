@@ -49,5 +49,5 @@ int main (int argc, char **argv)
 
   printf ("%d %d %d\n", a, b, c);
   
-  return 1;
+  return 0;
 }
