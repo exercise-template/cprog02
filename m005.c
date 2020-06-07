@@ -37,7 +37,7 @@ int determinant (int m[3][3])
 int main (int argc, char **argv)
 {
   int a[3][3];
-  float det;
+  int det;
   
   /* Read matrix lines. */
   
@@ -47,7 +47,7 @@ int main (int argc, char **argv)
 
   det = determinant (a);
   
-  printf ("%0.2f\n", det);
+  printf ("%d\n", det);
   
   return 0;
 }

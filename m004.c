@@ -19,6 +19,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 /* Return the value in decimal base of the string b, interpreted
    as the a positive binary number. If the string contains any
@@ -28,6 +29,7 @@
 
 int decimal (char *b)
 {
+  
   return 0;
 }
 
