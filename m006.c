@@ -26,7 +26,7 @@
 /* Compute the corss product of vectors 'a' and 'b', 
    and store the result in vector 'c'. */
 
-void crossprod (float a[3], float b[3], float c[3])
+void crossprod (int a[3], int b[3], int c[3])
 {
 }
 
@@ -36,8 +36,7 @@ void crossprod (float a[3], float b[3], float c[3])
 
 int main (int argc, char **argv)
 {
-  float u[3], v[3], z[3];
-  float det;
+  int u[3], v[3], z[3];
   
   /* Read matrix lines. */
   
