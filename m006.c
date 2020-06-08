@@ -40,12 +40,12 @@ int main (int argc, char **argv)
   
   /* Read matrix lines. */
   
-  scanf ("%f %f %f", &u[0], &u[1], &u[2]);
-  scanf ("%f %f %f", &v[0], &v[1], &v[2]);
+  scanf ("%d %d %d", &u[0], &u[1], &u[2]);
+  scanf ("%d %d %d", &v[0], &v[1], &v[2]);
 
   crossprod (u, v, z);
   
-  printf ("%.2f %.2f %.2f", z[0], z[1], z[2]);
+  printf ("%d %d %d", z[0], z[1], z[2]);
   
   return 0;
 }
