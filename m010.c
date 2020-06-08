@@ -23,10 +23,10 @@
 
 #define USAGE "m010 <day> <month>\n"
 
-enum {sun=1, mon, tue, wed, thu, fri, sat};
+enum {sun, mon, tue, wed, thu, fri, sat};
 
 /* Return the day of the week in the numeric form:
-   Sunday=1, Monday=2... Saturday=7.*/
+   Sunday=0, Monday=1... Saturday=6.*/
 
 int day_of_week (int day, int month)
 {
