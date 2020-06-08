@@ -25,7 +25,7 @@
 
 /* Sort three integers x, y, z in ascending order.*/
 
-void sort ()
+void sort (int *a, int *b, int *c)
 {
 }
 
