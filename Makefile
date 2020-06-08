@@ -30,7 +30,7 @@ LD_FLAGS=
 ## Build user programs.
 ##
 
-bin = m001 m002 m003 m004 m005 m006 m007 m008 m009 m010 m011 m012
+bin = m000 m001 m002 m003 m004 m005 m006 m007 m008 m009 m010 m011
 
 all : $(bin)
 
