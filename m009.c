@@ -23,7 +23,7 @@
 
 /* Sort the first 'n' integers values in 'vector'. */
 
-void sort (int vector[MAX], int n)
+void sort (int vector[], int n)
 {
 }
 
