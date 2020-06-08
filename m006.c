@@ -45,7 +45,7 @@ int main (int argc, char **argv)
 
   crossprod (u, v, z);
   
-  printf ("%d %d %d", z[0], z[1], z[2]);
+  printf ("%d %d %d\n", z[0], z[1], z[2]);
   
   return 0;
 }
