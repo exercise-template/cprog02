@@ -6,25 +6,19 @@
 
 ## Directions
 
- Complete the source code of each program as approriate.
+ Complete the implementation of each example program (m*.c) as indicated
+ in its respective source code. 
 
- Make sure your program compiles successfully with no errors or warnings.
+ Make sure your program compiles successfully with no errors or warnings,
+ as well as it produces the expected output.
  
- ## Reminders
- 
- Please, edit the fields between `<...>` in the comments at the top of file 
- `main.c` to accordingly (give your project a cool name). 
- 
- Fill in file `AUTHORS` with your personal information.
+ Reminder: please, fill in file `AUTHORS` with your personal information.
 
- ## Tips
- 
- Before submitting your work, make sure your compiler does not issue any 
- error or warning messages, as well as it does produce the right output. 
- 
- After submission, check the automatic test results to make sure
- everything works as expected. If not, make changes and resubmit 
- as many times as you need.
- 
  Optionally, you are welcome to edit this file entirely to customize it 
- to your project.
+ to your project, as long as you keep the attribution bellow.
+
+##
+
+ Further information: this project is based on
+ https://github.com/exercise-template/cprog02a
+
