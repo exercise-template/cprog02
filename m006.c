@@ -1,8 +1,8 @@
 /* m006.c - Cross product.
 
    This program reads the coordinates of two 3-dimensional
-   real vectors and outputs their cross (vector) product. 
-   Vector's coordinates are read as blank-separate real
+   integer vectors and outputs their cross (vector) product. 
+   Vectors' coordinates are read as blank-separate real
    numbers.
 
 
