@@ -22,7 +22,7 @@
 # make fetch-ref   delete and refetch all templates
 
 CC=gcc
-CPP_FLAGS= -Wall -Werror -Wno-unused -Wno-format-zero-length -g
+CPP_FLAGS= -Wall -g
 C_FLAGS= 
 LD_FLAGS= 
 
