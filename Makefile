@@ -77,7 +77,7 @@ bin-test : $(bin:m%=mt%)
 # t000.o   having the user functions modified by the programmer against
 # mt000.o  having the unaltered main function copied from the template
 
-$(bin:m%=mt%) : mt% : mt%.o t%.o
+$(bin:m%=mt%) : mt% : mt%.o # t%.o
 	$(CC) $(LD_FLAGS) $(LDFLAGS) $^ -o $@
 
 # Source t000.c is a copy of the user modified program with function main
