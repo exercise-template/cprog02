@@ -106,8 +106,9 @@ $(bin:m%=t%.h): t%.h : m%.c
 	perl -0777pe 's/\/\*(?:(?!\*\/).)*\*\/\n?//sg' $< | perl -ne 'printf if /[A-Za-z_][A-Za-z0-9_]*(?<!define)[\h\n]+((?!main)[A-Za-z_][A-Za-z0-9_]*\h*\(.*\))/' | perl -pe 's/(.*\(.*\))/\1;/g' > $@
 
 
-$(bin:m%=mt%.o) : mt%.o : mt%.c t%.h
-	$(CC) -include t$*.h -c $(CPP_FLAGS) $(C_FLAGS) $(CPPFLAGS) $(CFLAGS) $< -o $@
+$(bin:m%=mt%.o) : mt%.o : mt%.c 
+#	$(CC) -include t$*.h -c $(CPP_FLAGS) $(C_FLAGS) $(CPPFLAGS) $(CFLAGS) $< -o $@
+	$(CC) -c $(CPP_FLAGS) $(C_FLAGS) $(CPPFLAGS) $(CFLAGS) $< -o $@
 
 # In order to be sure that p000.c is in its pristine form and its main
 # function is unmodified, we fetch the original templates from the repository.
