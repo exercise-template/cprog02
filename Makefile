@@ -73,50 +73,15 @@ clean: clean-bin clean-test
 
 bin-test : $(bin:m%=mt%)
 
-# To build the binary test program mt000 we link
-# t000.o   having the user functions modified by the programmer against
-# mt000.o  having the unaltered main function copied from the template
 
-$(bin:m%=mt%) : mt% : mt%.o # t%.o
+$(bin:m%=mt%) : mt% : mt%.o 
 	$(CC) $(LD_FLAGS) $(LDFLAGS) $^ -o $@
-
-# Source t000.c is a copy of the user modified program with function main
-# marked with attribute 'weak', so that we can link t000.o against an object
-# which already provides its own main function (mt000.o). Then, object t000.o
-# is built using the standard %.o rule.
-
-t%.c : m%.c
-#	perl -pe 's/^ *([A-Za-z_][A-Za-z0-9_]*)\h+(main*\h*\(.*\))/__attribute__\(\(weak\)\) \1 \2 /g' $< > $@
-	perl -pe 's/([A-Za-z_][A-Za-z0-9_]*(?<!define))[\h\n]+(main*\h*\(.*\))/__attribute__\(\(weak\)\) \1 \2 /g' $< > $@
-
-# Source mt000.c is a modified copy of the pristine template p000.c from
-# which user program mt000.c was created. File mt000.c has all its functions
-# but main() renamed so that they do not conflict with those in the user
-# program mt000.c.
-
-# $(bin:m%=mt%.c) : mt%.c : p%.c
-# 	perl -pe 's/([A-Za-z_][A-Za-z0-9_]*(?<!define))[\h\n]+(?!main)([A-Za-z_][A-Za-z0-9_]*)(\h*\(.*\))/\1 \2_off \3/g' $< > $@
 
 $(bin:m%=mt%.c) : mt%.c : m%.c
 	cp $< $@
 
-# To build mt%.o we need the headers of the functions in m%.c
-
-$(bin:m%=t%.h): t%.h : m%.c
-	perl -0777pe 's/\/\*(?:(?!\*\/).)*\*\/\n?//sg' $< | perl -ne 'printf if /[A-Za-z_][A-Za-z0-9_]*(?<!define)[\h\n]+((?!main)[A-Za-z_][A-Za-z0-9_]*\h*\(.*\))/' | perl -pe 's/(.*\(.*\))/\1;/g' > $@
-
-
 $(bin:m%=mt%.o) : mt%.o : mt%.c 
-#	$(CC) -include t$*.h -c $(CPP_FLAGS) $(C_FLAGS) $(CPPFLAGS) $(CFLAGS) $< -o $@
 	$(CC) -c $(CPP_FLAGS) $(C_FLAGS) $(CPPFLAGS) $(CFLAGS) $< -o $@
-
-# In order to be sure that p000.c is in its pristine form and its main
-# function is unmodified, we fetch the original templates from the repository.
-
-RAWURL=https://raw.githubusercontent.com/exercise-template/cprog02/master
-
-$(bin:m%=p%.c):
-	wget -O - $(RAWURL)/$(@:p%.c=m%.c) > $@
 
 # Clean tests and auxiliary files
 
