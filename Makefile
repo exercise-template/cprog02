@@ -94,9 +94,11 @@ t%.c : m%.c
 # but main() renamed so that they do not conflict with those in the user
 # program mt000.c.
 
-$(bin:m%=mt%.c) : mt%.c : p%.c
-#	perl -pe 's/^ *([A-Za-z_][A-Za-z0-9_]*)\h+(?!main)([A-Za-z_][A-Za-z0-9_]*)(\h*\(.*\))/\1 \2_off \3/g' $< > $@
-	perl -pe 's/([A-Za-z_][A-Za-z0-9_]*(?<!define))[\h\n]+(?!main)([A-Za-z_][A-Za-z0-9_]*)(\h*\(.*\))/\1 \2_off \3/g' $< > $@
+# $(bin:m%=mt%.c) : mt%.c : p%.c
+# 	perl -pe 's/([A-Za-z_][A-Za-z0-9_]*(?<!define))[\h\n]+(?!main)([A-Za-z_][A-Za-z0-9_]*)(\h*\(.*\))/\1 \2_off \3/g' $< > $@
+
+$(bin:m%=mt%.c) : mt%.c : m%.c
+	cp $< $@
 
 # To build mt%.o we need the headers of the functions in m%.c
 
